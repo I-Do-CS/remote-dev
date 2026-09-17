@@ -2,6 +2,7 @@ import BookmarkIcon from "../Misc/BookmarkIcon";
 import officeImage from "../../assets/images/office-view.jpg";
 
 export default function JobItemContent() {
+    return <EmptyJobContent />; // Return the empty view for now
     return (
         <section className="job-details">
             <div>
@@ -87,7 +88,6 @@ export default function JobItemContent() {
     );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function EmptyJobContent() {
     return (
         <section className="job-details">
