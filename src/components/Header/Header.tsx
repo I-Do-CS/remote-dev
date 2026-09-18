@@ -1,21 +1,7 @@
-import BookmarksButton from "./BookmarksButton";
-import Logo from "./Logo";
-import SearchForm from "./SearchForm";
+interface HeaderProps {
+    children: React.ReactNode;
+}
 
-type HeaderProps = {
-    searchTerm: string;
-    setSearchTerm: (searchTerm: string) => void;
-};
-
-export default function Header({ searchTerm, setSearchTerm }: HeaderProps) {
-    return (
-        <header className="header">
-            <div className="header__top">
-                <Logo />
-                <BookmarksButton />
-            </div>
-
-            <SearchForm searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-        </header>
-    );
+export default function Header({ children }: HeaderProps) {
+    return <header className="header">{children}</header>;
 }

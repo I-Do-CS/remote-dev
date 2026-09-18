@@ -1,6 +1,18 @@
-import { useEffect, useState } from "react";
-import { Background, Container, Footer, Header } from "./components";
+import {
+    Background,
+    Container,
+    Footer,
+    Header,
+    HeaderTop,
+    JobItemContent,
+    JobList,
+    PaginationControls,
+    SearchForm,
+    Sidebar,
+    SidebarTop,
+} from "./components";
 import { JOBS_BASE_URL } from "./lib/constants";
+import { useEffect, useState } from "react";
 
 function App() {
     const [jobItems, setJobItems] = useState<Job[]>([]);
@@ -22,9 +34,19 @@ function App() {
         <>
             <Background />
 
-            <Header searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+            <Header>
+                <HeaderTop />
+                <SearchForm searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+            </Header>
 
-            <Container jobItems={jobItems} />
+            <Container>
+                <Sidebar>
+                    <SidebarTop />
+                    <JobList jobItems={jobItems} />
+                    <PaginationControls />
+                </Sidebar>
+                <JobItemContent />
+            </Container>
 
             <Footer />
         </>
