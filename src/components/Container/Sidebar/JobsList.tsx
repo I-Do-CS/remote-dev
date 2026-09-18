@@ -4,7 +4,7 @@ import JobsListItem from "./JobsListItem";
 type JobsListProps = {
     jobs: Job[];
     isLoading: boolean;
-    activeJobId?: number;
+    activeJobId: number | null;
 };
 
 export default function JobsList({ jobs, isLoading, activeJobId }: JobsListProps) {

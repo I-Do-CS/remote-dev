@@ -34,7 +34,7 @@ export default function App() {
                     <JobsList
                         jobs={jobs}
                         isLoading={isJobsLoading}
-                        activeJobId={activeJobDetail?.id}
+                        activeJobId={activeJobDetail ? activeJobDetail.id : null}
                     />
                     <PaginationControls />
                 </Sidebar>
