@@ -4,35 +4,19 @@ import {
     Footer,
     Header,
     HeaderTop,
-    JobItemContent,
-    JobList,
+    JobContent,
+    JobsList,
     PaginationControls,
     SearchForm,
     Sidebar,
     SidebarTop,
 } from "./components";
-import { JOBS_BASE_URL } from "./lib/constants";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useJobs } from "./lib/hooks";
 
 function App() {
-    const [jobItems, setJobItems] = useState<Job[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-
-    useEffect(() => {
-        if (!searchTerm || searchTerm.trim() === "") return;
-        async function fetchData() {
-            setIsLoading(true);
-
-            const response = await fetch(`${JOBS_BASE_URL}?search=${searchTerm}`);
-            const data = await response.json();
-
-            setIsLoading(false);
-            setJobItems(data.jobItems);
-        }
-
-        fetchData();
-    }, [searchTerm]);
+    const { jobs, isLoading } = useJobs(searchTerm);
 
     return (
         <>
@@ -46,10 +30,10 @@ function App() {
             <Container>
                 <Sidebar>
                     <SidebarTop />
-                    <JobList jobItems={jobItems} isLoading={isLoading} />
+                    <JobsList jobs={jobs} isLoading={isLoading} />
                     <PaginationControls />
                 </Sidebar>
-                <JobItemContent />
+                <JobContent />
             </Container>
 
             <Footer />

@@ -1,7 +1,7 @@
 import BookmarkIcon from "../Misc/BookmarkIcon";
 import officeImage from "../../assets/images/office-view.jpg";
 
-export default function JobItemContent() {
+export default function JobContent() {
     return <EmptyJobContent />; // Return the empty view for now
     return (
         <section className="job-details">

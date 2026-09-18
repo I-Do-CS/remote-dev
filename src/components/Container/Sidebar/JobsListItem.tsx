@@ -4,7 +4,7 @@ type JobListItemProps = {
     item: Job;
 };
 
-export default function JobListItem({ item }: JobListItemProps) {
+export default function JobsListItem({ item }: JobListItemProps) {
     return (
         <li className="job-item">
             <a className="job-item__link">
