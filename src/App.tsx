@@ -14,11 +14,17 @@ import {
     SortingControls,
 } from "./components";
 import { useState } from "react";
-import { useActiveJobTracking, useJobs } from "./lib/hooks";
+import { useActiveJobTracking, useDebounce, useJobs } from "./lib/hooks";
+import { SEARCH_DELAY } from "./lib/constants";
 
 export default function App() {
     const [searchTerm, setSearchTerm] = useState("");
-    const { paginatedJobs: jobs, isLoading: isJobsLoading, totalJobs } = useJobs(searchTerm);
+    const debouncedSearchTerm = useDebounce(searchTerm, SEARCH_DELAY);
+    const {
+        paginatedJobs: jobs,
+        isLoading: isJobsLoading,
+        totalJobs,
+    } = useJobs(debouncedSearchTerm);
     const [activeJobDetail, isActiveJobDetailLoading] = useActiveJobTracking();
 
     return (

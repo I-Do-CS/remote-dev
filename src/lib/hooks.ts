@@ -1,6 +1,18 @@
 import { useEffect, useState } from "react";
 import { JOBS_API_BASE_URL } from "./constants";
 
+export function useDebounce<T>(value: T, delay?: number) {
+    const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
+    useEffect(() => {
+        const timer = setTimeout(() => setDebouncedValue(value), delay || 500);
+
+        return () => clearTimeout(timer);
+    }, [value, delay]);
+
+    return debouncedValue;
+}
+
 export function useJobs(searchTerm: string) {
     const [jobs, setJobs] = useState<Job[]>([]);
     const [isLoading, setIsLoading] = useState(false);
