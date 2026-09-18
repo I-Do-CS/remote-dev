@@ -1,11 +1,7 @@
-import ResultsCount from "./ResultsCount";
-import SortingControls from "./SortingControls";
+type SidebarTopProps = {
+    children: React.ReactNode;
+};
 
-export default function SidebarTop() {
-    return (
-        <div className="sidebar__top">
-            <ResultsCount />
-            <SortingControls />
-        </div>
-    );
+export default function SidebarTop({ children }: SidebarTopProps) {
+    return <div className="sidebar__top">{children}</div>;
 }

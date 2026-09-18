@@ -7,16 +7,18 @@ import {
     JobDetailContainer,
     JobsList,
     PaginationControls,
+    ResultsCount,
     SearchForm,
     Sidebar,
     SidebarTop,
+    SortingControls,
 } from "./components";
 import { useState } from "react";
 import { useActiveJobTracking, useJobs } from "./lib/hooks";
 
 export default function App() {
     const [searchTerm, setSearchTerm] = useState("");
-    const [jobs, isJobsLoading] = useJobs(searchTerm);
+    const { paginatedJobs: jobs, isLoading: isJobsLoading, totalJobs } = useJobs(searchTerm);
     const [activeJobDetail, isActiveJobDetailLoading] = useActiveJobTracking();
 
     return (
@@ -30,7 +32,10 @@ export default function App() {
 
             <Container>
                 <Sidebar>
-                    <SidebarTop />
+                    <SidebarTop>
+                        <ResultsCount totalJobs={totalJobs} />
+                        <SortingControls />
+                    </SidebarTop>
                     <JobsList
                         jobs={jobs}
                         isLoading={isJobsLoading}

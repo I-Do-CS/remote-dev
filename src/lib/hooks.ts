@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { JOBS_API_BASE_URL } from "./constants";
 
-export function useJobs(searchTerm: string): [Job[], boolean] {
+export function useJobs(searchTerm: string) {
     const [jobs, setJobs] = useState<Job[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const totalJobs = jobs.length;
     const paginatedJobs = jobs.slice(0, 7);
 
     useEffect(() => {
@@ -21,7 +22,7 @@ export function useJobs(searchTerm: string): [Job[], boolean] {
         fetchData();
     }, [searchTerm]);
 
-    return [paginatedJobs, isLoading];
+    return { paginatedJobs, isLoading, totalJobs };
 }
 
 export function useActiveJobTracking(): [JobDetail | null, boolean] {
