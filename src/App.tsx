@@ -17,13 +17,17 @@ import { useEffect, useState } from "react";
 function App() {
     const [jobItems, setJobItems] = useState<Job[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
+        if (!searchTerm || searchTerm.trim() === "") return;
         async function fetchData() {
-            if (searchTerm.trim() === "") return;
+            setIsLoading(true);
 
             const response = await fetch(`${JOBS_BASE_URL}?search=${searchTerm}`);
             const data = await response.json();
+
+            setIsLoading(false);
             setJobItems(data.jobItems);
         }
 
@@ -42,7 +46,7 @@ function App() {
             <Container>
                 <Sidebar>
                     <SidebarTop />
-                    <JobList jobItems={jobItems} />
+                    <JobList jobItems={jobItems} isLoading={isLoading} />
                     <PaginationControls />
                 </Sidebar>
                 <JobItemContent />
