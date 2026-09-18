@@ -4,7 +4,7 @@ import {
     Footer,
     Header,
     HeaderTop,
-    JobContent,
+    JobDetailContainer,
     JobsList,
     PaginationControls,
     SearchForm,
@@ -12,11 +12,12 @@ import {
     SidebarTop,
 } from "./components";
 import { useState } from "react";
-import { useJobs } from "./lib/hooks";
+import { useActiveJobTracking, useJobs } from "./lib/hooks";
 
-function App() {
+export default function App() {
     const [searchTerm, setSearchTerm] = useState("");
-    const { jobs, isLoading } = useJobs(searchTerm);
+    const [jobs, isJobsLoading] = useJobs(searchTerm);
+    const [activeJobDetail, isActiveJobDetailLoading] = useActiveJobTracking();
 
     return (
         <>
@@ -30,15 +31,16 @@ function App() {
             <Container>
                 <Sidebar>
                     <SidebarTop />
-                    <JobsList jobs={jobs} isLoading={isLoading} />
+                    <JobsList jobs={jobs} isLoading={isJobsLoading} />
                     <PaginationControls />
                 </Sidebar>
-                <JobContent />
+                <JobDetailContainer
+                    jobDetail={activeJobDetail}
+                    isLoading={isActiveJobDetailLoading}
+                />
             </Container>
 
             <Footer />
         </>
     );
 }
-
-export default App;
