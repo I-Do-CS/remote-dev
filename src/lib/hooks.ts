@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { JOBS_API_BASE_URL } from "./constants";
 
-export function useDebounce<T>(value: T, delay?: number) {
+export function useDebounce<T>(value: T, delay: number = 500) {
     const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
     useEffect(() => {
-        const timer = setTimeout(() => setDebouncedValue(value), delay || 500);
+        const timer = setTimeout(() => setDebouncedValue(value), delay);
 
         return () => clearTimeout(timer);
     }, [value, delay]);
