@@ -51,8 +51,8 @@ export default function JobDetail({ jobDetail }: JobDetailProps) {
                         <p className="qualifications__sub-text">Other qualifications may apply</p>
                     </div>
                     <ul className="qualifications__list">
-                        {jobDetail.qualifications.map((qualification, index) => (
-                            <li key={index} className="qualifications__item">
+                        {jobDetail.qualifications.map((qualification) => (
+                            <li key={qualification} className="qualifications__item">
                                 {qualification}
                             </li>
                         ))}
@@ -65,8 +65,8 @@ export default function JobDetail({ jobDetail }: JobDetailProps) {
                         <p className="reviews__sub-text">Recent things people are saying</p>
                     </div>
                     <ul className="reviews__list">
-                        {jobDetail.reviews.map((review, index) => (
-                            <li key={index} className="reviews__item">
+                        {jobDetail.reviews.map((review) => (
+                            <li key={review} className="reviews__item">
                                 {review}
                             </li>
                         ))}
