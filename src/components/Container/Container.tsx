@@ -1,10 +1,14 @@
 import JobItemContent from "./JobItemContent";
 import Sidebar from "./Sidebar/Sidebar";
 
-export default function Container() {
+type ContainerProps = {
+    jobItems: Job[];
+};
+
+export default function Container({ jobItems }: ContainerProps) {
     return (
         <div className="container">
-            <Sidebar />
+            <Sidebar jobItems={jobItems} />
             <JobItemContent />
         </div>
     );
