@@ -31,7 +31,11 @@ export default function App() {
             <Container>
                 <Sidebar>
                     <SidebarTop />
-                    <JobsList jobs={jobs} isLoading={isJobsLoading} />
+                    <JobsList
+                        jobs={jobs}
+                        isLoading={isJobsLoading}
+                        activeJobId={activeJobDetail?.id}
+                    />
                     <PaginationControls />
                 </Sidebar>
                 <JobDetailContainer
