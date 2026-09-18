@@ -20,12 +20,11 @@ import { SEARCH_DELAY } from "./lib/constants";
 export default function App() {
     const [searchTerm, setSearchTerm] = useState("");
     const debouncedSearchTerm = useDebounce(searchTerm, SEARCH_DELAY);
-    const {
-        paginatedJobs: jobs,
-        isLoading: isJobsLoading,
-        totalJobs,
-    } = useJobs(debouncedSearchTerm);
+    const { jobs, isLoading: isJobsLoading } = useJobs(debouncedSearchTerm);
     const [activeJobDetail, isActiveJobDetailLoading] = useActiveJobTracking();
+
+    const paginatedJobs = jobs.slice(0, 7);
+    const totalJobs = jobs.length;
 
     return (
         <>
@@ -43,7 +42,7 @@ export default function App() {
                         <SortingControls />
                     </SidebarTop>
                     <JobsList
-                        jobs={jobs}
+                        jobs={paginatedJobs}
                         isLoading={isJobsLoading}
                         activeJobId={activeJobDetail ? activeJobDetail.id : null}
                     />

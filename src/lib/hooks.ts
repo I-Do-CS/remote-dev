@@ -1,5 +1,18 @@
 import { useEffect, useState } from "react";
 import { JOBS_API_BASE_URL } from "./constants";
+import { useQuery } from "@tanstack/react-query";
+import { minutesToMs } from "./utiles";
+
+const fetchJobDetail = async (id: number): Promise<JobDetail | null> => {
+    const response = await fetch(`${JOBS_API_BASE_URL}/data/${id}`);
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.discription);
+    }
+
+    const data = await response.json();
+    return data.jobItem ? data.jobItem : null;
+};
 
 export function useDebounce<T>(value: T, delay: number = 500) {
     const [debouncedValue, setDebouncedValue] = useState<T>(value);
@@ -13,11 +26,12 @@ export function useDebounce<T>(value: T, delay: number = 500) {
     return debouncedValue;
 }
 
-export function useJobs(searchTerm: string) {
+export function useJobs(searchTerm: string): {
+    jobs: Job[];
+    isLoading: boolean;
+} {
     const [jobs, setJobs] = useState<Job[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-    const totalJobs = jobs.length;
-    const paginatedJobs = jobs.slice(0, 7);
 
     useEffect(() => {
         if (!searchTerm || searchTerm.trim() === "") return;
@@ -34,13 +48,11 @@ export function useJobs(searchTerm: string) {
         fetchData();
     }, [searchTerm]);
 
-    return { paginatedJobs, isLoading, totalJobs };
+    return { jobs, isLoading };
 }
 
 export function useActiveJobTracking(): [JobDetail | null, boolean] {
     const [activeJobId, setActiveJobId] = useState<number | null>(null);
-    const [activeJobDetail, setActiveJobDetail] = useState<JobDetail | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const handleHashChange = () => {
@@ -55,22 +67,19 @@ export function useActiveJobTracking(): [JobDetail | null, boolean] {
         };
     }, []);
 
-    useEffect(() => {
-        if (!activeJobId) return;
+    const { data: activeJobDetail, isInitialLoading: isLoading } = useQuery(
+        ["job-detail", activeJobId],
+        () => fetchJobDetail(activeJobId!),
+        {
+            staleTime: minutesToMs(10),
+            refetchOnWindowFocus: false,
+            retry: false,
+            enabled: Boolean(activeJobId), // Only fetch if activeJobId is not null
+            onError: (error) => {
+                console.log(error);
+            },
+        },
+    );
 
-        setActiveJobDetail(null); // Reset the active job detail when the ID changes.
-        const fetchJobDetails = async () => {
-            setIsLoading(true);
-
-            const response = await fetch(`${JOBS_API_BASE_URL}/data/${activeJobId}`);
-            const data = await response.json();
-
-            setIsLoading(false);
-            setActiveJobDetail(data.jobItem);
-        };
-
-        fetchJobDetails();
-    }, [activeJobId]);
-
-    return [activeJobDetail, isLoading];
+    return [activeJobDetail ?? null, isLoading];
 }
