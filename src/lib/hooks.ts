@@ -3,6 +3,17 @@ import { JOBS_API_BASE_URL } from "./constants";
 import { useQuery } from "@tanstack/react-query";
 import { minutesToMs } from "./utiles";
 
+const fetchJobs = async (searchTerm: string): Promise<Job[]> => {
+    const response = await fetch(`${JOBS_API_BASE_URL}/data?search=${searchTerm}`);
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.discription);
+    }
+    const data = await response.json();
+
+    return data.jobItems;
+};
+
 const fetchJobDetail = async (id: number): Promise<JobDetail | null> => {
     const response = await fetch(`${JOBS_API_BASE_URL}/data/${id}`);
     if (!response.ok) {
@@ -30,25 +41,23 @@ export function useJobs(searchTerm: string): {
     jobs: Job[];
     isLoading: boolean;
 } {
-    const [jobs, setJobs] = useState<Job[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const { data: jobs, isInitialLoading: isLoading } = useQuery(
+        ["jobs", searchTerm],
+        () => fetchJobs(searchTerm),
+        {
+            staleTime: minutesToMs(2), // 2 minutes
+            refetchOnWindowFocus: false,
+            retry: false,
+            enabled: searchTerm.trim().length > 0,
+            onError: (error) => {
+                console.log(error);
+            },
+        },
+    );
 
-    useEffect(() => {
-        if (!searchTerm || searchTerm.trim() === "") return;
-        async function fetchData() {
-            setIsLoading(true);
+    const jobsToReturn: Job[] = jobs ?? [];
 
-            const response = await fetch(`${JOBS_API_BASE_URL}/data?search=${searchTerm}`);
-            const data = await response.json();
-
-            setIsLoading(false);
-            setJobs(data.jobItems);
-        }
-
-        fetchData();
-    }, [searchTerm]);
-
-    return { jobs, isLoading };
+    return { jobs: jobsToReturn, isLoading };
 }
 
 export function useActiveJobTracking(): [JobDetail | null, boolean] {
