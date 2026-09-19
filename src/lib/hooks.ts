@@ -7,7 +7,7 @@ const fetchJobs = async (searchTerm: string): Promise<Job[]> => {
     const response = await fetch(`${JOBS_API_BASE_URL}/data?search=${searchTerm}`);
     if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.discription);
+        throw new Error(errorData.description);
     }
     const data = await response.json();
 
@@ -18,7 +18,7 @@ const fetchJobDetail = async (id: number): Promise<JobDetail | null> => {
     const response = await fetch(`${JOBS_API_BASE_URL}/data/${id}`);
     if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.discription);
+        throw new Error(errorData.description);
     }
 
     const data = await response.json();
