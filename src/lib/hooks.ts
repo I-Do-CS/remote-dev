@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { JOBS_API_BASE_URL } from "./constants";
 import { useQuery } from "@tanstack/react-query";
-import { minutesToMs } from "./utiles";
+import { minutesToMs } from "./utilities";
 
 const fetchJobs = async (searchTerm: string): Promise<Job[]> => {
     const response = await fetch(`${JOBS_API_BASE_URL}/data?search=${searchTerm}`);
