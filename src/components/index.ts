@@ -6,7 +6,7 @@ export { default as JobDetailContainer } from "./Container/JobDetailContainer/Jo
 export { default as Sidebar } from "./Container/Sidebar/Sidebar";
 export { default as SidebarTop } from "./Container/Sidebar/SidebarTop";
 export { default as ResultsCount } from "./Container/Sidebar/ResultsCount";
-export { default as SortingControls } from "./Container/Sidebar/SortingControls";
+export { default as SortingControls } from "./Container/Sidebar/SortingControls/SortingControls";
 export { default as JobsList } from "./Container/Sidebar/JobsList";
 export { default as PaginationControls } from "./Container/Sidebar/PaginationControls/PaginationControls";
 

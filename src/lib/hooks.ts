@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { JOBS_API_BASE_URL } from "./constants";
 import { useQuery } from "@tanstack/react-query";
 import { minutesToMs, toastError } from "./utilities";
+import { SortBy } from "./types";
 
 export function useResettableState<T>(
     initialValue: T,
@@ -39,7 +40,10 @@ export function useDebounce<T>(value: T, delay: number = 500) {
     return debouncedValue;
 }
 
-export function useJobs(searchTerm: string): {
+export function useJobs(
+    searchTerm: string,
+    sortBy: "relevant" | SortBy,
+): {
     jobs: Job[];
     isLoading: boolean;
 } {
@@ -55,7 +59,14 @@ export function useJobs(searchTerm: string): {
         },
     );
 
-    const jobsToReturn: Job[] = jobs ?? [];
+    let jobsToReturn: Job[] = jobs ?? [];
+
+    // Apply sorting
+    if (sortBy === "recent") {
+        jobsToReturn = [...jobsToReturn].sort((a, b) => a.daysAgo - b.daysAgo);
+    } else if (sortBy === "relevant") {
+        jobsToReturn = [...jobsToReturn].sort((a, b) => b.relevantScore - a.relevantScore);
+    }
 
     return { jobs: jobsToReturn, isLoading };
 }

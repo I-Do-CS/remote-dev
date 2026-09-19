@@ -23,17 +23,28 @@ import {
 } from "./lib/hooks";
 import { PAGINATION_PAGESIZE, SEARCH_DELAY } from "./lib/constants";
 import { Toaster } from "react-hot-toast";
+import { SortBy } from "./lib/types";
 
 export default function App() {
+    // Search term for jobs
     const [searchTerm, setSearchTerm] = useState("");
     const debouncedSearchTerm = useDebounce(searchTerm, SEARCH_DELAY);
-    const { jobs, isLoading: isJobsLoading } = useJobs(debouncedSearchTerm);
+
+    // Sorting
+    const [sortBy, setSortBy] = useState<SortBy>("relevant");
+    const handleSortChange = (newSortBy: SortBy) => {
+        setSortBy(newSortBy);
+    };
+    
+    // Jobs
+    const { jobs, isLoading: isJobsLoading } = useJobs(debouncedSearchTerm, sortBy);
     const [activeJobDetail, isActiveJobDetailLoading] = useActiveJobTracking();
+
+    // Pagination
     // Resets pagination every time the user queries new data
-    const [currentPage, setCurrentPage] = useResettableState(1, [debouncedSearchTerm]);
+    const [currentPage, setCurrentPage] = useResettableState(1, [debouncedSearchTerm, sortBy]);
     const { paginatedJobs, totalPages } = usePaginatedJobs(currentPage, PAGINATION_PAGESIZE, jobs);
     const totalJobs = jobs.length;
-
     const handlePageChange = (direction: "next" | "previous") => {
         if (direction === "next") {
             setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
@@ -57,7 +68,7 @@ export default function App() {
                 <Sidebar>
                     <SidebarTop>
                         <ResultsCount totalJobs={totalJobs} />
-                        <SortingControls />
+                        <SortingControls sortBy={sortBy} onSortChange={handleSortChange} />
                     </SidebarTop>
                     <JobsList
                         jobs={paginatedJobs}

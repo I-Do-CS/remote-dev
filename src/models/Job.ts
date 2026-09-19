@@ -3,6 +3,6 @@ interface Job {
     company: string;
     daysAgo: number;
     id: number;
-    relevanceScore: number;
+    relevantScore: number;
     title: string;
 }
