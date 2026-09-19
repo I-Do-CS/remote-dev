@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { JOBS_API_BASE_URL } from "./constants";
 import { useQuery } from "@tanstack/react-query";
-import { minutesToMs } from "./utilities";
+import { minutesToMs, toastError } from "./utilities";
 
 const fetchJobs = async (searchTerm: string): Promise<Job[]> => {
     const response = await fetch(`${JOBS_API_BASE_URL}/data?search=${searchTerm}`);
@@ -49,9 +49,7 @@ export function useJobs(searchTerm: string): {
             refetchOnWindowFocus: false,
             retry: false,
             enabled: searchTerm.trim().length > 0,
-            onError: (error) => {
-                console.log(error);
-            },
+            onError: (error: unknown) => toastError(error),
         },
     );
 
@@ -84,9 +82,7 @@ export function useActiveJobTracking(): [JobDetail | null, boolean] {
             refetchOnWindowFocus: false,
             retry: false,
             enabled: Boolean(activeJobId), // Only fetch if activeJobId is not null
-            onError: (error) => {
-                console.log(error);
-            },
+            onError: (error: unknown) => toastError(error),
         },
     );
 

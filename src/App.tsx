@@ -16,6 +16,7 @@ import {
 import { useState } from "react";
 import { useActiveJobTracking, useDebounce, useJobs } from "./lib/hooks";
 import { SEARCH_DELAY } from "./lib/constants";
+import { Toaster } from "react-hot-toast";
 
 export default function App() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -29,6 +30,8 @@ export default function App() {
     return (
         <>
             <Background />
+
+            <Toaster position="top-right" />
 
             <Header>
                 <HeaderTop />
