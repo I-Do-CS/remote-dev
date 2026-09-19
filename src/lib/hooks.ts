@@ -3,27 +3,29 @@ import { JOBS_API_BASE_URL } from "./constants";
 import { useQuery } from "@tanstack/react-query";
 import { minutesToMs, toastError } from "./utilities";
 
-const fetchJobs = async (searchTerm: string): Promise<Job[]> => {
-    const response = await fetch(`${JOBS_API_BASE_URL}/data?search=${searchTerm}`);
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.description);
-    }
-    const data = await response.json();
+export function useResettableState<T>(
+    initialValue: T,
+    dependencies: unknown[],
+): [T, React.Dispatch<React.SetStateAction<T>>] {
+    const [value, setValue] = useState<T>(initialValue);
 
-    return data.jobItems;
-};
+    useEffect(() => {
+        setValue(initialValue);
+    }, dependencies);
 
-const fetchJobDetail = async (id: number): Promise<JobDetail | null> => {
-    const response = await fetch(`${JOBS_API_BASE_URL}/data/${id}`);
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.description);
-    }
+    return [value, setValue];
+}
 
-    const data = await response.json();
-    return data.jobItem ? data.jobItem : null;
-};
+export function usePaginatedJobs(
+    currentPage: number,
+    pageSize: number,
+    jobs: Job[],
+): { totalPages: number; paginatedJobs: Job[] } {
+    const paginatedJobs = jobs.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+    const totalPages = Math.ceil(jobs.length / pageSize);
+
+    return jobs.length > 0 ? { totalPages, paginatedJobs } : { totalPages: 0, paginatedJobs };
+}
 
 export function useDebounce<T>(value: T, delay: number = 500) {
     const [debouncedValue, setDebouncedValue] = useState<T>(value);
@@ -87,4 +89,26 @@ export function useActiveJobTracking(): [JobDetail | null, boolean] {
     );
 
     return [activeJobDetail ?? null, isLoading];
+}
+
+async function fetchJobs(searchTerm: string): Promise<Job[]> {
+    const response = await fetch(`${JOBS_API_BASE_URL}/data?search=${searchTerm}`);
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.description);
+    }
+    const data = await response.json();
+
+    return data.jobItems;
+}
+
+async function fetchJobDetail(id: number): Promise<JobDetail | null> {
+    const response = await fetch(`${JOBS_API_BASE_URL}/data/${id}`);
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.description);
+    }
+
+    const data = await response.json();
+    return data.jobItem ? data.jobItem : null;
 }

@@ -14,8 +14,14 @@ import {
     SortingControls,
 } from "./components";
 import { useState } from "react";
-import { useActiveJobTracking, useDebounce, useJobs } from "./lib/hooks";
-import { SEARCH_DELAY } from "./lib/constants";
+import {
+    useActiveJobTracking,
+    useDebounce,
+    useJobs,
+    usePaginatedJobs,
+    useResettableState,
+} from "./lib/hooks";
+import { PAGINATION_PAGESIZE, SEARCH_DELAY } from "./lib/constants";
 import { Toaster } from "react-hot-toast";
 
 export default function App() {
@@ -23,9 +29,18 @@ export default function App() {
     const debouncedSearchTerm = useDebounce(searchTerm, SEARCH_DELAY);
     const { jobs, isLoading: isJobsLoading } = useJobs(debouncedSearchTerm);
     const [activeJobDetail, isActiveJobDetailLoading] = useActiveJobTracking();
-
-    const paginatedJobs = jobs.slice(0, 7);
+    // Resets pagination every time the user queries new data
+    const [currentPage, setCurrentPage] = useResettableState(1, [debouncedSearchTerm]);
+    const { paginatedJobs, totalPages } = usePaginatedJobs(currentPage, PAGINATION_PAGESIZE, jobs);
     const totalJobs = jobs.length;
+
+    const handlePageChange = (direction: "next" | "previous") => {
+        if (direction === "next") {
+            setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+        } else if (direction === "previous") {
+            setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+        }
+    };
 
     return (
         <>
@@ -49,7 +64,11 @@ export default function App() {
                         isLoading={isJobsLoading}
                         activeJobId={activeJobDetail ? activeJobDetail.id : null}
                     />
-                    <PaginationControls />
+                    <PaginationControls
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                    />
                 </Sidebar>
                 <JobDetailContainer
                     jobDetail={activeJobDetail}
