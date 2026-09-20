@@ -4,6 +4,21 @@ import { useQuery } from "@tanstack/react-query";
 import { minutesToMs, toastError } from "./utilities";
 import { SortBy } from "./types";
 
+export function useOnClickOutside(ref: React.RefObject<HTMLElement>, handler: () => void) {
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (ref.current && !ref.current.contains(event.target as Node)) {
+                handler();
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [ref, handler]);
+}
+
 export function usePersistedState<T>(
     key: string,
     initialValue: T,
