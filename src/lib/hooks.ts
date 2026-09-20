@@ -4,6 +4,28 @@ import { useQuery } from "@tanstack/react-query";
 import { minutesToMs, toastError } from "./utilities";
 import { SortBy } from "./types";
 
+export function usePersistedState<T>(
+    key: string,
+    initialValue: T,
+): [T, React.Dispatch<React.SetStateAction<T>>] {
+    const [value, setValue] = useState<T>(() => {
+        try {
+            const storedValue = localStorage.getItem(key);
+            if (storedValue) {
+                return JSON.parse(storedValue);
+            }
+        } catch {
+            return initialValue;
+        }
+    });
+
+    useEffect(() => {
+        localStorage.setItem(key, JSON.stringify(value));
+    }, [key, value]);
+
+    return [value, setValue];
+}
+
 export function useResettableState<T>(
     initialValue: T,
     dependencies: unknown[],
@@ -12,7 +34,7 @@ export function useResettableState<T>(
 
     useEffect(() => {
         setValue(initialValue);
-    }, dependencies);
+    }, [...dependencies, initialValue]);
 
     return [value, setValue];
 }

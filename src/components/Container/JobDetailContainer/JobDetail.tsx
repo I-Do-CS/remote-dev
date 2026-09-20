@@ -20,7 +20,7 @@ export default function JobDetail({ jobDetail }: JobDetailProps) {
                             {jobDetail.daysAgo <= 0 ? "Today" : `${jobDetail.daysAgo}d`}
                         </time>
 
-                        <BookmarkIcon />
+                        <BookmarkIcon id={jobDetail.id} />
                     </div>
                 </div>
 

@@ -35,7 +35,7 @@ export default function App() {
     const handleSortChange = (newSortBy: SortBy) => {
         setSortBy(newSortBy);
     };
-    
+
     // Jobs
     const { jobs, isLoading: isJobsLoading } = useJobs(debouncedSearchTerm, sortBy);
     const [activeJobDetail, isActiveJobDetailLoading] = useActiveJobTracking();
