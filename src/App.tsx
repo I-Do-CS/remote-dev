@@ -17,7 +17,7 @@ import { useState } from "react";
 import {
     useActiveJobTracking,
     useDebounce,
-    useJobs,
+    useSearchedJobs,
     usePaginatedJobs,
     useResettableState,
 } from "./lib/hooks";
@@ -37,7 +37,7 @@ export default function App() {
     };
 
     // Jobs
-    const { jobs, isLoading: isJobsLoading } = useJobs(debouncedSearchTerm, sortBy);
+    const { jobs, isLoading: isJobsLoading } = useSearchedJobs(debouncedSearchTerm, sortBy);
     const [activeJobDetail, isActiveJobDetailLoading] = useActiveJobTracking();
 
     // Pagination

@@ -1,4 +1,4 @@
-import Spinner from "../../Misc/Spinner";
+import Spinner from "../Misc/Spinner";
 import JobsListItem from "./JobsListItem";
 
 type JobsListProps = {

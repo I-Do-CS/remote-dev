@@ -1,4 +1,4 @@
-import BookmarkIcon from "../../Misc/BookmarkIcon";
+import BookmarkIcon from "../Misc/BookmarkIcon";
 
 type JobListItemProps = {
     item: Job;

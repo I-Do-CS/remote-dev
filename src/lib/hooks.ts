@@ -62,9 +62,32 @@ export function useDebounce<T>(value: T, delay: number = 500) {
     return debouncedValue;
 }
 
-export function useJobs(
+export function useFilteredJobs(filterByIds: number[]): {
+    jobs: Job[];
+    isLoading: boolean;
+} {
+    const { data: jobs, isInitialLoading: isLoading } = useQuery(
+        ["filtered-jobs", filterByIds],
+        () => fetchJobs(),
+        {
+            staleTime: minutesToMs(2), // 2 minutes
+            refetchOnWindowFocus: false,
+            retry: false,
+            onError: (error: unknown) => toastError(error),
+        },
+    );
+
+    let jobsToReturn: Job[] = jobs ?? [];
+    if (filterByIds.length > 0) {
+        jobsToReturn = jobsToReturn.filter((job) => filterByIds.includes(job.id));
+    }
+
+    return { jobs: jobsToReturn, isLoading };
+}
+
+export function useSearchedJobs(
     searchTerm: string,
-    sortBy: "relevant" | SortBy,
+    sortBy: SortBy = "relevant",
 ): {
     jobs: Job[];
     isLoading: boolean;
@@ -124,8 +147,12 @@ export function useActiveJobTracking(): [JobDetail | null, boolean] {
     return [activeJobDetail ?? null, isLoading];
 }
 
-async function fetchJobs(searchTerm: string): Promise<Job[]> {
-    const response = await fetch(`${JOBS_API_BASE_URL}/data?search=${searchTerm}`);
+async function fetchJobs(searchTerm?: string): Promise<Job[]> {
+    const fetchUrl = searchTerm
+        ? `${JOBS_API_BASE_URL}/data?search=${searchTerm}`
+        : `${JOBS_API_BASE_URL}/data`;
+
+    const response = await fetch(fetchUrl);
     if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.description);

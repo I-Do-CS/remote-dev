@@ -1,12 +1,7 @@
-import { createContext } from "react";
 import { LOCAL_STORAGE_KEYS } from "../lib/constants";
-import { usePersistedState } from "../lib/hooks";
+import { useFilteredJobs, usePersistedState } from "../lib/hooks";
+import { BookmarksContext } from "./BookmarksContext";
 
-export type TBookmarksContext = {
-    bookmarkedIds: number[];
-    handleBookmarkToggle: (jobId: number) => void;
-};
-export const BookmarksContext = createContext<TBookmarksContext | null>(null);
 type BookmarksContextProviderProps = { children: React.ReactNode };
 
 export default function BookmarksContextProvider({ children }: BookmarksContextProviderProps) {
@@ -21,12 +16,15 @@ export default function BookmarksContextProvider({ children }: BookmarksContextP
             setBookmarkedIds((prev) => [...prev, jobId]);
         }
     };
+    const { jobs: bookmarkedJobs, isLoading } = useFilteredJobs(bookmarkedIds);
 
     return (
         <BookmarksContext.Provider
             value={{
                 bookmarkedIds,
                 handleBookmarkToggle,
+                bookmarkedJobs,
+                isLoading,
             }}
         >
             {children}
