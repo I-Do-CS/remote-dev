@@ -2,24 +2,8 @@ import { useEffect, useState } from "react";
 import { JOBS_API_BASE_URL } from "./constants";
 import { useQuery } from "@tanstack/react-query";
 import { httpClient, durationConverter, toaster } from "./utilities";
-import { ServerResponseForJobDetails, ServerResponseForJobs, SortBy } from "./types";
-
-// TODO: Delete this once done refactoring
-
-export function useOnClickOutside(ref: React.RefObject<HTMLElement>, handler: () => void) {
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (ref.current && !ref.current.contains(event.target as Node)) {
-                handler();
-            }
-        };
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [ref, handler]);
-}
+import { SortBy } from "./types";
+import { ServerResponseForJobDetails, ServerResponseForJobs } from "../models/ServerResponses";
 
 export function usePersistedState<T>(
     key: string,
@@ -177,6 +161,5 @@ async function fetchJobDetails(id: number): Promise<JobDetails | null> {
         `${JOBS_API_BASE_URL}/data/${id}`,
     );
 
-    console.log(data);
     return data.jobItem ? data.jobItem : null;
 }

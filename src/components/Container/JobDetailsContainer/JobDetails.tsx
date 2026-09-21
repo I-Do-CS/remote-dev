@@ -1,4 +1,4 @@
-import BookmarkIcon from "../../Misc/BookmarkIcon";
+import BookmarkIcon from "../../Header/Bookmarks/BookmarkIcon";
 import officeImageURL from "../../../assets/images/office-view.jpg";
 
 type JobDetailsProps = {

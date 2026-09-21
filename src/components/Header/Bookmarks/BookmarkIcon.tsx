@@ -1,15 +1,20 @@
 import { BookmarkFilledIcon } from "@radix-ui/react-icons";
-import { useBookmarksContext } from "../../contexts/hooks";
+import { useBookmarkedJobIdsStore } from "../../../lib/stores/bookmarkedJobIdsStore";
 
 type BookmarkIconProps = { id: number };
 
 export default function BookmarkIcon({ id }: BookmarkIconProps) {
-    const { bookmarkedIds, handleBookmarkToggle } = useBookmarksContext();
-    const isBookmarked = bookmarkedIds.includes(id);
+    const { bookmarkedJobIds, addBookmarkedJobId, removeBookmarkedJobId } =
+        useBookmarkedJobIdsStore((state) => ({ ...state }));
+    const isBookmarked = bookmarkedJobIds.includes(id);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
         event.stopPropagation();
-        handleBookmarkToggle(id);
+        if (isBookmarked) {
+            removeBookmarkedJobId(id);
+        } else {
+            addBookmarkedJobId(id);
+        }
     };
 
     return (

@@ -1,4 +1,4 @@
-import BookmarksButton from "./BookmarksButton";
+import BookmarksButton from "./Bookmarks/BookmarksButton";
 import Logo from "./Logo";
 
 export default function HeaderTop() {

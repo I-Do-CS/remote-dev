@@ -2,17 +2,6 @@ export type SortBy = "relevant" | "recent";
 
 export type PaginatorDirection = "previous" | "next";
 
-export type ServerResponseForJobs = {
-    jobItems: Job[];
-    public: boolean;
-    sorted: boolean;
-};
-
-export type ServerResponseForJobDetails = {
-    jobItem: JobDetails;
-    public: boolean;
-};
-
 export class HttpError extends Error {
     constructor(
         public readonly status: number,

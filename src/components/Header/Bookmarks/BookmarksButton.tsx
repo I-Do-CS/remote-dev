@@ -1,20 +1,22 @@
 import { TriangleDownIcon } from "@radix-ui/react-icons";
-import BookmarksPopover from "../Misc/BookmarksPopover";
+import BookmarksPopover from "./BookmarksPopover";
 import { useRef, useState } from "react";
-import { useBookmarksContext } from "../../contexts/hooks";
-import { useActiveJobTracking, useOnClickOutside } from "../../lib/hooks";
+import { useActiveJobTracking } from "../../../lib/hooks";
+import { useBookmarkedJobDetails } from "../../../lib/hooks/app-specific";
+import { useOnClickOutside } from "../../../lib/hooks/shared";
 
 export default function BookmarksButton() {
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-    const { bookmarkedJobs, isLoading } = useBookmarksContext();
+    const { bookmarkedJobDetails, isLoading } = useBookmarkedJobDetails();
     const [activeJob] = useActiveJobTracking();
     const sectionRef = useRef<HTMLElement>(null);
+    const popoverRef = useRef<HTMLDivElement>(null);
 
     const handlePopoverToggle = () => {
         setIsPopoverOpen(!isPopoverOpen);
     };
 
-    useOnClickOutside(sectionRef, () => setIsPopoverOpen(false));
+    useOnClickOutside([sectionRef, popoverRef], () => setIsPopoverOpen(false));
 
     return (
         <section ref={sectionRef}>
@@ -24,9 +26,10 @@ export default function BookmarksButton() {
 
             {isPopoverOpen && (
                 <BookmarksPopover
+                    ref={popoverRef}
                     activeJobId={activeJob ? activeJob.id : null}
                     isLoading={isLoading}
-                    jobs={bookmarkedJobs}
+                    jobs={bookmarkedJobDetails}
                 />
             )}
         </section>
