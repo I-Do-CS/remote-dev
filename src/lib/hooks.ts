@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { JOBS_API_BASE_URL } from "./constants";
 import { useQuery } from "@tanstack/react-query";
-import { minutesToMs, toastError } from "./utilities";
-import { SortBy } from "./types";
+import { httpClient, durationConverter, toaster } from "./utilities";
+import { ServerResponseForJobDetail, ServerResponseForJobs, SortBy } from "./types";
+
+// TODO: Delete this once done refactoring
 
 export function useOnClickOutside(ref: React.RefObject<HTMLElement>, handler: () => void) {
     useEffect(() => {
@@ -85,10 +87,10 @@ export function useFilteredJobs(filterByIds: number[]): {
         ["filtered-jobs", filterByIds],
         () => fetchJobs(),
         {
-            staleTime: minutesToMs(2), // 2 minutes
+            staleTime: durationConverter.minutesToMs(2), // 2 minutes
             refetchOnWindowFocus: false,
             retry: false,
-            onError: (error: unknown) => toastError(error),
+            onError: (error: unknown) => toaster.error(error),
         },
     );
 
@@ -111,11 +113,11 @@ export function useSearchedJobs(
         ["jobs", searchTerm],
         () => fetchJobs(searchTerm),
         {
-            staleTime: minutesToMs(2), // 2 minutes
+            staleTime: durationConverter.minutesToMs(2), // 2 minutes
             refetchOnWindowFocus: false,
             retry: false,
             enabled: searchTerm.trim().length > 0,
-            onError: (error: unknown) => toastError(error),
+            onError: (error: unknown) => toaster.error(error),
         },
     );
 
@@ -151,11 +153,11 @@ export function useActiveJobTracking(): [JobDetail | null, boolean] {
         ["job-detail", activeJobId],
         () => fetchJobDetail(activeJobId!),
         {
-            staleTime: minutesToMs(10),
+            staleTime: durationConverter.minutesToMs(10),
             refetchOnWindowFocus: false,
             retry: false,
             enabled: Boolean(activeJobId), // Only fetch if activeJobId is not null
-            onError: (error: unknown) => toastError(error),
+            onError: (error: unknown) => toaster.error(error),
         },
     );
 
@@ -167,23 +169,14 @@ async function fetchJobs(searchTerm?: string): Promise<Job[]> {
         ? `${JOBS_API_BASE_URL}/data?search=${searchTerm}`
         : `${JOBS_API_BASE_URL}/data`;
 
-    const response = await fetch(fetchUrl);
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.description);
-    }
-    const data = await response.json();
-
-    return data.jobItems;
+    return (await httpClient.get<ServerResponseForJobs>(fetchUrl)).jobItems;
 }
 
 async function fetchJobDetail(id: number): Promise<JobDetail | null> {
-    const response = await fetch(`${JOBS_API_BASE_URL}/data/${id}`);
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.description);
-    }
+    const data = await httpClient.get<ServerResponseForJobDetail>(
+        `${JOBS_API_BASE_URL}/data/${id}`,
+    );
 
-    const data = await response.json();
+    console.log(data);
     return data.jobItem ? data.jobItem : null;
 }
