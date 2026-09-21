@@ -1,1 +1,1 @@
-export { default as useBookmarkedJobDetails } from "./useBookmarkedJobDetails";
+export { default as useBookmarkedJobDetails } from "./useBookmarkedJobs";

@@ -4,7 +4,7 @@ import { JOBS_API_BASE_URL, QUERY_KEYS, QUERY_STALE_TIMES } from "../../constant
 import { httpClient, toaster } from "../../utilities";
 import { ServerResponseForJobDetails } from "../../../models/ServerResponses";
 
-export default function useBookmarkedJobDetails(): {
+export default function useBookmarkedJobs(): {
     bookmarkedJobDetails: JobDetails[];
     isLoading: boolean;
 } {
