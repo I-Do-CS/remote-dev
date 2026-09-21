@@ -1,45 +1,45 @@
 import BookmarkIcon from "../../Misc/BookmarkIcon";
 import officeImageURL from "../../../assets/images/office-view.jpg";
 
-type JobDetailProps = {
-    jobDetail: JobDetail;
+type JobDetailsProps = {
+    jobDetails: JobDetails;
 };
 
-export default function JobDetail({ jobDetail }: JobDetailProps) {
+export default function JobDetails({ jobDetails }: JobDetailsProps) {
     return (
         <>
-            <img src={jobDetail.coverImgURL ?? officeImageURL} alt="#" />
-            <a className="apply-btn" href={jobDetail.companyURL} target="_blank">
+            <img src={jobDetails.coverImgURL ?? officeImageURL} alt="#" />
+            <a className="apply-btn" href={jobDetails.companyURL} target="_blank">
                 Apply
             </a>
             <section className="job-info">
                 <div className="job-info__left">
-                    <div className="job-info__badge">{jobDetail.badgeLetters}</div>
+                    <div className="job-info__badge">{jobDetails.badgeLetters}</div>
                     <div className="job-info__below-badge">
                         <time className="job-info__time">
-                            {jobDetail.daysAgo <= 0 ? "Today" : `${jobDetail.daysAgo}d`}
+                            {jobDetails.daysAgo <= 0 ? "Today" : `${jobDetails.daysAgo}d`}
                         </time>
 
-                        <BookmarkIcon id={jobDetail.id} />
+                        <BookmarkIcon id={jobDetails.id} />
                     </div>
                 </div>
 
                 <div className="job-info__right">
-                    <h2 className="second-heading">{jobDetail.title}</h2>
-                    <p className="job-info__company">{jobDetail.company}</p>
-                    <p className="job-info__description">{jobDetail.description}</p>
+                    <h2 className="second-heading">{jobDetails.title}</h2>
+                    <p className="job-info__company">{jobDetails.company}</p>
+                    <p className="job-info__description">{jobDetails.description}</p>
                     <div className="job-info__extras">
                         <p className="job-info__extra">
                             <i className="fa-solid fa-clock job-info__extra-icon"></i>
-                            {jobDetail.duration}
+                            {jobDetails.duration}
                         </p>
                         <p className="job-info__extra">
                             <i className="fa-solid fa-money-bill job-info__extra-icon"></i>
-                            {jobDetail.salary}
+                            {jobDetails.salary}
                         </p>
                         <p className="job-info__extra">
                             <i className="fa-solid fa-location-dot job-info__extra-icon"></i>{" "}
-                            {jobDetail.location}
+                            {jobDetails.location}
                         </p>
                     </div>
                 </div>
@@ -51,7 +51,7 @@ export default function JobDetail({ jobDetail }: JobDetailProps) {
                         <p className="qualifications__sub-text">Other qualifications may apply</p>
                     </div>
                     <ul className="qualifications__list">
-                        {jobDetail.qualifications.map((qualification) => (
+                        {jobDetails.qualifications.map((qualification) => (
                             <li key={qualification} className="qualifications__item">
                                 {qualification}
                             </li>
@@ -65,7 +65,7 @@ export default function JobDetail({ jobDetail }: JobDetailProps) {
                         <p className="reviews__sub-text">Recent things people are saying</p>
                     </div>
                     <ul className="reviews__list">
-                        {jobDetail.reviews.map((review) => (
+                        {jobDetails.reviews.map((review) => (
                             <li key={review} className="reviews__item">
                                 {review}
                             </li>

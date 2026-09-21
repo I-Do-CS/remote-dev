@@ -1,4 +1,4 @@
-interface JobDetail extends Job {
+interface JobDetails extends Job {
     description: string;
     qualifications: string[];
     reviews: string[];

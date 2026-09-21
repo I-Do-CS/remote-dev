@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { JOBS_API_BASE_URL } from "./constants";
 import { useQuery } from "@tanstack/react-query";
 import { httpClient, durationConverter, toaster } from "./utilities";
-import { ServerResponseForJobDetail, ServerResponseForJobs, SortBy } from "./types";
+import { ServerResponseForJobDetails, ServerResponseForJobs, SortBy } from "./types";
 
 // TODO: Delete this once done refactoring
 
@@ -133,7 +133,7 @@ export function useSearchedJobs(
     return { jobs: jobsToReturn, isLoading };
 }
 
-export function useActiveJobTracking(): [JobDetail | null, boolean] {
+export function useActiveJobTracking(): [JobDetails | null, boolean] {
     const [activeJobId, setActiveJobId] = useState<number | null>(null);
 
     useEffect(() => {
@@ -149,9 +149,9 @@ export function useActiveJobTracking(): [JobDetail | null, boolean] {
         };
     }, []);
 
-    const { data: activeJobDetail, isInitialLoading: isLoading } = useQuery(
+    const { data: activeJobDetails, isInitialLoading: isLoading } = useQuery(
         ["job-detail", activeJobId],
-        () => fetchJobDetail(activeJobId!),
+        () => fetchJobDetails(activeJobId!),
         {
             staleTime: durationConverter.minutesToMs(10),
             refetchOnWindowFocus: false,
@@ -161,7 +161,7 @@ export function useActiveJobTracking(): [JobDetail | null, boolean] {
         },
     );
 
-    return [activeJobDetail ?? null, isLoading];
+    return [activeJobDetails ?? null, isLoading];
 }
 
 async function fetchJobs(searchTerm?: string): Promise<Job[]> {
@@ -172,8 +172,8 @@ async function fetchJobs(searchTerm?: string): Promise<Job[]> {
     return (await httpClient.get<ServerResponseForJobs>(fetchUrl)).jobItems;
 }
 
-async function fetchJobDetail(id: number): Promise<JobDetail | null> {
-    const data = await httpClient.get<ServerResponseForJobDetail>(
+async function fetchJobDetails(id: number): Promise<JobDetails | null> {
+    const data = await httpClient.get<ServerResponseForJobDetails>(
         `${JOBS_API_BASE_URL}/data/${id}`,
     );
 

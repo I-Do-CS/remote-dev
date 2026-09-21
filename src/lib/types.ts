@@ -8,8 +8,8 @@ export type ServerResponseForJobs = {
     sorted: boolean;
 };
 
-export type ServerResponseForJobDetail = {
-    jobItem: JobDetail;
+export type ServerResponseForJobDetails = {
+    jobItem: JobDetails;
     public: boolean;
 };
 

@@ -1,7 +1,7 @@
 export { default as Background } from "./Misc/Background";
 
 export { default as Container } from "./Container/Container";
-export { default as JobDetailContainer } from "./Container/JobDetailContainer/JobDetailContainer";
+export { default as JobDetailsContainer } from "./Container/JobDetailsContainer/JobDetailsContainer";
 
 export { default as Sidebar } from "./Container/Sidebar/Sidebar";
 export { default as SidebarTop } from "./Container/Sidebar/SidebarTop";

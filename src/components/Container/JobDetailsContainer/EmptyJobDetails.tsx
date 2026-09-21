@@ -1,4 +1,4 @@
-export default function EmptyJobDetail() {
+export default function EmptyJobDetails() {
     return (
         <div className="job-details__start-view">
             <p>What are you looking for?</p>

@@ -4,7 +4,7 @@ import {
     Footer,
     Header,
     HeaderTop,
-    JobDetailContainer,
+    JobDetailsContainer,
     JobsList,
     PaginationControls,
     ResultsCount,
@@ -38,7 +38,7 @@ export default function App() {
 
     // Jobs
     const { jobs, isLoading: isJobsLoading } = useSearchedJobs(debouncedSearchTerm, sortBy);
-    const [activeJobDetail, isActiveJobDetailLoading] = useActiveJobTracking();
+    const [activeJobDetails, isActiveJobDetailsLoading] = useActiveJobTracking();
 
     // Pagination
     // Resets pagination every time the user queries new data
@@ -73,7 +73,7 @@ export default function App() {
                     <JobsList
                         jobs={paginatedJobs}
                         isLoading={isJobsLoading}
-                        activeJobId={activeJobDetail ? activeJobDetail.id : null}
+                        activeJobId={activeJobDetails ? activeJobDetails.id : null}
                     />
                     <PaginationControls
                         currentPage={currentPage}
@@ -81,9 +81,9 @@ export default function App() {
                         onPageChange={handlePageChange}
                     />
                 </Sidebar>
-                <JobDetailContainer
-                    jobDetail={activeJobDetail}
-                    isLoading={isActiveJobDetailLoading}
+                <JobDetailsContainer
+                    jobDetails={activeJobDetails}
+                    isLoading={isActiveJobDetailsLoading}
                 />
             </Container>
 
