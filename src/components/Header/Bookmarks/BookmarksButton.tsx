@@ -1,9 +1,9 @@
 import { TriangleDownIcon } from "@radix-ui/react-icons";
-import BookmarksPopover from "./BookmarksPopover";
 import { useRef, useState } from "react";
 import { useActiveJobTracking } from "../../../lib/hooks";
 import { useBookmarkedJobDetails } from "../../../lib/hooks/app-specific";
 import { useOnClickOutside } from "../../../lib/hooks/shared";
+import BookmarksPopover from "./BookmarksPopover";
 
 export default function BookmarksButton() {
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
@@ -26,7 +26,7 @@ export default function BookmarksButton() {
 
             {isPopoverOpen && (
                 <BookmarksPopover
-                    ref={popoverRef}
+                    popoverRef={popoverRef}
                     activeJobId={activeJob ? activeJob.id : null}
                     isLoading={isLoading}
                     jobs={bookmarkedJobDetails}
